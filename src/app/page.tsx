@@ -91,17 +91,21 @@ export default function Home() {
     </Card>
   );
 
+    const navigateToTab = (tab: string) => {
+        setActiveTab(tab);
+    };
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <div className="flex justify-around">
-          <Button variant={activeTab === "home" ? "default" : "secondary"} onClick={() => setActiveTab("home")}>
+          <Button variant={activeTab === "home" ? "default" : "secondary"} onClick={() => navigateToTab("home")}>
             Home
           </Button>
-          <Button variant={activeTab === "create" ? "default" : "secondary"} onClick={() => setActiveTab("create")}>
+          <Button variant={activeTab === "create" ? "default" : "secondary"} onClick={() => navigateToTab("create")}>
             Create
           </Button>
-          <Button variant={activeTab === "events" ? "default" : "secondary"} onClick={() => setActiveTab("events")}>
+          <Button variant={activeTab === "events" ? "default" : "secondary"} onClick={() => navigateToTab("events")}>
             Events
           </Button>
         </div>
@@ -117,13 +121,13 @@ export default function Home() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuItem onClick={() => setActiveTab("account")}>
+            <DropdownMenuItem onClick={() => navigateToTab("account")}>
               Account
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setActiveTab("chats")}>
+            <DropdownMenuItem onClick={() => navigateToTab("chats")}>
               Chats
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setActiveTab("my-events")}>
+            <DropdownMenuItem onClick={() => navigateToTab("my-events")}>
               My Events
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -181,12 +185,28 @@ export default function Home() {
         <EventsTab events={allEvents} />
       )}
 
-      {activeTab === "account" && (
-        <section>
-          <h2>Account Settings</h2>
-          <p>Here you can manage your account settings.</p>
-        </section>
-      )}
+        {activeTab === "account" && (
+            <section>
+                <h2 className="text-2xl font-bold mb-4">Account Settings</h2>
+                <p>Here you can manage your account settings.</p>
+                {/* Add your generic account page content here */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>User Information</CardTitle>
+                        <CardDescription>Manage your personal information and preferences.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div>
+                            <strong>Name:</strong> John Doe
+                        </div>
+                        <div>
+                            <strong>Email:</strong> john.doe@example.com
+                        </div>
+                        {/* Add more account details and settings here */}
+                    </CardContent>
+                </Card>
+            </section>
+        )}
 
       {activeTab === "chats" && (
         <section>
@@ -204,3 +224,4 @@ export default function Home() {
     </div>
   );
 }
+
