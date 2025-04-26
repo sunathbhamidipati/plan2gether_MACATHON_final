@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,6 +32,7 @@ export default function Home() {
   const [joinedEvents, setJoinedEvents] = useState<Event[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [eventsOnSelectedDate, setEventsOnSelectedDate] = useState<Event[]>([]);
+  const [selectedChat, setSelectedChat] = useState<Event | null>(null);
 
   const { toast } = useToast();
 
@@ -235,9 +237,53 @@ export default function Home() {
         )}
 
       {activeTab === "chats" && (
-        <section>
-          <h2>Chats</h2>
-          <p>Here you can view your chats.</p>
+        <section className="flex h-full">
+          <div className="w-1/4 border-r">
+            <h2 className="text-xl font-bold mb-4 p-4">My Chats</h2>
+            <ScrollArea className="h-[400px]">
+              {joinedEvents.map((event) => (
+                <div
+                  key={event.description}
+                  className="p-4 cursor-pointer hover:bg-secondary"
+                  onClick={() => setSelectedChat(event)}
+                >
+                  {event.description}
+                  {/* Display the latest message preview here if available */}
+                </div>
+              ))}
+            </ScrollArea>
+          </div>
+          <div className="w-3/4 p-4">
+            {selectedChat ? (
+              <div>
+                <h3 className="text-lg font-semibold mb-2">{selectedChat.description}</h3>
+                <div className="space-y-2">
+                  {/* Example messages - replace with actual chat data */}
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-muted-foreground">Jay</span>
+                    <div className="bg-accent text-accent-foreground rounded-lg p-2">
+                      We will be meeting at the Flagstaff gardens.
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-muted-foreground">Stacie</span>
+                    <div className="bg-accent text-accent-foreground rounded-lg p-2">
+                      Great! so excited to meet all of youuu
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-sm text-muted-foreground">You</span>
+                    <div className="bg-accent text-accent-foreground rounded-lg p-2">
+                      Do we bring any supplies of our own?
+                    </div>
+                  </div>
+                </div>
+                <Input type="text" placeholder="Type your message..." className="mt-4" />
+              </div>
+            ) : (
+              <p>Select a chat to view messages.</p>
+            )}
+          </div>
         </section>
       )}
 
