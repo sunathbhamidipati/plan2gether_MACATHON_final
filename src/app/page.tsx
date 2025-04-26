@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User } from "lucide-react";
+import { User, Search, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -69,6 +69,11 @@ export default function Home() {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
+
+    const clearSearchQuery = () => {
+        setSearchQuery("");
+        setEvents([]);
+    };
 
   const handleEventClick = (event: Event) => {
     setSelectedEvent(event);
@@ -179,7 +184,8 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 bg-accent text-accent-foreground p-4 rounded-md">
+          <div className="text-2xl font-bold">plan2gether</div>
         <div className="flex justify-around">
           <Button variant={activeTab === "home" ? "default" : "secondary"} onClick={() => navigateToTab("home")}>
             Home
@@ -217,15 +223,30 @@ export default function Home() {
       </div>
 
       {activeTab === "home" && (
-        <section>
-          <h2 className="text-2xl font-bold mb-4">What do you want to do?</h2>
-          <Input
-            type="text"
-            placeholder="Search for events"
-            value={searchQuery}
-            onChange={handleSearch}
-            className="mb-4"
-          />
+        <section className="flex flex-col items-center justify-center h-[calc(100vh - 150px)]">
+          <h2 className="text-3xl font-bold mb-4">What do you want to do?</h2>
+            <div className="relative w-96">
+            <Input
+                type="text"
+                placeholder="Search for events"
+                value={searchQuery}
+                onChange={handleSearch}
+                className="mb-4 rounded-full pl-12"
+            />
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <Search className="h-5 w-5 text-muted-foreground" />
+                </div>
+                {searchQuery && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={clearSearchQuery}
+                        className="absolute inset-y-0 right-2 flex items-center"
+                    >
+                        <X className="h-4 w-4" />
+                    </Button>
+                )}
+            </div>
 
           {events.length > 0 ? (
             <div>

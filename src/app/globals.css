@@ -8,9 +8,9 @@ body {
 
 @layer base {
   :root {
-    --background: 20 20% 96%;
+    --background: 39 100% 97%; /* Light pink */
     --foreground: 20 20% 4%;
-    --card: 20 20% 96%;
+    --card: 39 100% 97%;
     --card-foreground: 20 20% 4%;
     --popover: 20 20% 96%;
     --popover-foreground: 20 20% 4%;
@@ -20,7 +20,7 @@ body {
     --secondary-foreground: 20 20% 10%;
     --muted: 20 20% 90%;
     --muted-foreground: 20 20% 45.1%;
-    --accent: 17 100% 70%; /* Coral (#FF8A65) in HSL */
+    --accent: 351 88% 74%; /* Light coral for accent */
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -86,5 +86,4 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
 
