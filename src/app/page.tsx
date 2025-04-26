@@ -18,6 +18,9 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +28,7 @@ export default function Home() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [activeTab, setActiveTab] = useState("home");
   const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [joinedEvents, setJoinedEvents] = useState<Event[]>([]);
 
   const { toast } = useToast();
 
@@ -64,11 +68,14 @@ export default function Home() {
   };
 
   const handleJoinEvent = () => {
-    toast({
-      title: "Joined Event",
-      description: `You have joined the event: ${selectedEvent?.description}`,
-    });
-    setSelectedEvent(null);
+    if (selectedEvent) {
+      setJoinedEvents(prevJoinedEvents => [...prevJoinedEvents, selectedEvent]);
+      toast({
+        title: "Joined Event",
+        description: `You have joined the event: ${selectedEvent?.description}`,
+      });
+      setSelectedEvent(null);
+    }
   };
 
   const addEvent = (newEvent: Event) => {
@@ -217,11 +224,22 @@ export default function Home() {
 
       {activeTab === "my-events" && (
         <section>
-          <h2>My Events</h2>
-          <p>Here you can manage your events.</p>
+          <h2 className="text-2xl font-bold mb-4">My Events</h2>
+            <div className="w-full">
+              <Calendar
+                mode="month"
+                captionLayout="dropdown"
+                className="rounded-md border"
+                onSelect={console.log}
+                // Set the events to highlight
+                // @ts-expect-error
+                selected={joinedEvents.map(event => new Date(event.date))}
+              />
+            </div>
         </section>
       )}
     </div>
   );
 }
+
 
