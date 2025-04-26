@@ -22,7 +22,7 @@ const CreateEventTab: React.FC<CreateEventTabProps> = ({ addEvent }) => {
   const [activitiesDescription, setActivitiesDescription] = useState("");
   const [tags, setTags] = useState("");
   const [eventIdeas, setEventIdeas] = useState<EventIdea[]>([]);
-    const [isCreateEventDialogOpen, setIsCreateEventDialogOpen] = useState(false);
+  const [isCreateEventDialogOpen, setIsCreateEventDialogOpen] = useState(false);
 
 
   const handleGenerateIdeas = async () => {
@@ -57,9 +57,19 @@ const CreateEventTab: React.FC<CreateEventTabProps> = ({ addEvent }) => {
         className="mb-4"
       />
 
-      <Button onClick={handleGenerateIdeas} className="mb-4 bg-accent text-white">
-        Generate Event Ideas
-      </Button>
+      <div className="flex space-x-4">
+          <Button onClick={handleGenerateIdeas} className="bg-accent text-white">
+              Generate Event Ideas
+          </Button>
+
+          <CreateEventDialog
+              open={isCreateEventDialogOpen}
+              onOpenChange={setIsCreateEventDialogOpen}
+              addEvent={addEvent}
+              className="pl-2"
+          />
+      </div>
+
 
       {eventIdeas.length > 0 && (
         <div>
@@ -77,14 +87,9 @@ const CreateEventTab: React.FC<CreateEventTabProps> = ({ addEvent }) => {
           ))}
         </div>
       )}
-
-        <CreateEventDialog
-            open={isCreateEventDialogOpen}
-            onOpenChange={setIsCreateEventDialogOpen}
-            addEvent={addEvent}
-        />
     </section>
   );
 };
 
 export default CreateEventTab;
+
