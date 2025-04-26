@@ -3,7 +3,21 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Axiforma, sans-serif;
+}
+
+@font-face {
+  font-family: 'Axiforma';
+  src: url('/fonts/Axiforma-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Axiforma';
+  src: url('/fonts/Axiforma-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @layer base {
@@ -41,6 +55,8 @@ body {
     --sidebar-accent-foreground: 20 20% 10%;
     --sidebar-border: 20 20% 91%;
     --sidebar-ring: 17 100% 70%;
+    --popup-background: #f2e2c1;
+    --pressed-button: #f2e2c1;
   }
   .dark {
     --background: 20 20% 4%;
@@ -75,6 +91,8 @@ body {
     --sidebar-accent-foreground: 20 20% 95.9%;
     --sidebar-border: 20 20% 15.9%;
     --sidebar-ring: 17 100% 70%;
+    --popup-background: #f2e2c1;
+    --pressed-button: #f2e2c1;
   }
 }
 
@@ -86,4 +104,5 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
 
