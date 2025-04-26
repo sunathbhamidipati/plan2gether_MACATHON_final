@@ -18,7 +18,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -112,20 +111,20 @@ export default function Home() {
             <Button variant="ghost" className="h-8 w-8 p-0 rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarFallback>
-                  <User className="h-4 w-4" />
+                  <User className="h-5 w-5" />
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuItem asChild>
-              <Link href="/account">Account</Link>
+            <DropdownMenuItem onClick={() => setActiveTab("account")}>
+              Account
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/chats">Chats</Link>
+            <DropdownMenuItem onClick={() => setActiveTab("chats")}>
+              Chats
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/my-events">My Events</Link>
+            <DropdownMenuItem onClick={() => setActiveTab("my-events")}>
+              My Events
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -180,6 +179,27 @@ export default function Home() {
 
       {activeTab === "events" && (
         <EventsTab events={allEvents} />
+      )}
+
+      {activeTab === "account" && (
+        <section>
+          <h2>Account Settings</h2>
+          <p>Here you can manage your account settings.</p>
+        </section>
+      )}
+
+      {activeTab === "chats" && (
+        <section>
+          <h2>Chats</h2>
+          <p>Here you can view your chats.</p>
+        </section>
+      )}
+
+      {activeTab === "my-events" && (
+        <section>
+          <h2>My Events</h2>
+          <p>Here you can manage your events.</p>
+        </section>
       )}
     </div>
   );
