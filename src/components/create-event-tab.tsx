@@ -7,16 +7,23 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { generateEventIdeas } from "@/ai/flows/generate-event-ideas";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { CreateEventDialog } from "@/components/create-event-dialog";
 
 interface EventIdea {
   title: string;
   description: string;
 }
 
-const CreateEventTab = () => {
+interface CreateEventTabProps {
+  addEvent: (newEvent: any) => void;
+}
+
+const CreateEventTab: React.FC<CreateEventTabProps> = ({ addEvent }) => {
   const [activitiesDescription, setActivitiesDescription] = useState("");
   const [tags, setTags] = useState("");
   const [eventIdeas, setEventIdeas] = useState<EventIdea[]>([]);
+    const [isCreateEventDialogOpen, setIsCreateEventDialogOpen] = useState(false);
+
 
   const handleGenerateIdeas = async () => {
     const tagList = tags.split(",").map((tag) => tag.trim());
@@ -71,9 +78,11 @@ const CreateEventTab = () => {
         </div>
       )}
 
-      <Button variant="secondary">
-        <a href="#create-from-scratch" className="text-white no-underline">Create Your Own Event From Scratch</a>
-      </Button>
+        <CreateEventDialog
+            open={isCreateEventDialogOpen}
+            onOpenChange={setIsCreateEventDialogOpen}
+            addEvent={addEvent}
+        />
     </section>
   );
 };

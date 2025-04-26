@@ -425,11 +425,7 @@ export default function Home() {
               )}
           </section>
       )}
-        <CreateEventDialog
-            open={isCreateEventDialogOpen}
-            onOpenChange={setIsCreateEventDialogOpen}
-            addEvent={addEvent}
-        />
     </div>
   );
 }
+
