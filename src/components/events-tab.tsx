@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const EventsTab = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -47,7 +48,7 @@ const EventsTab = () => {
         className="mb-4"
       />
 
-      <div>
+      <ScrollArea className="h-[400px] w-full rounded-md border">
         {filteredEvents.map((event) => (
           <Card key={event.description} className="mb-4 cursor-pointer" onClick={() => handleEventClick(event)}>
             <CardHeader>
@@ -63,7 +64,7 @@ const EventsTab = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </ScrollArea>
 
       <Dialog open={!!selectedEvent} onOpenChange={(open) => { if (!open) setSelectedEvent(null); }}>
         <DialogTrigger asChild>
