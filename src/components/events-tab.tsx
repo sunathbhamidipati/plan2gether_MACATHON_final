@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { getEvents, Event } from "@/services/event";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
 
 const EventsTab = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -36,35 +36,53 @@ const EventsTab = () => {
     setSelectedEvent(null);
   };
 
+  const formatDate = (date: Date): string => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <section>
-      <h2 className="text-2xl font-bold mb-4">All Events</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">All Events</h2>
+        <Button variant="outline">Filters</Button>
+      </div>
 
-      <Input
-        type="text"
-        placeholder="Filter by tag"
-        value={filterTag}
-        onChange={(e) => setFilterTag(e.target.value)}
-        className="mb-4"
-      />
-
-      <ScrollArea className="h-[400px] w-full rounded-md border">
-        {filteredEvents.map((event) => (
-          <Card key={event.description} className="mb-4 cursor-pointer" onClick={() => handleEventClick(event)}>
-            <CardHeader>
-              <CardTitle>{event.description}</CardTitle>
-              <CardDescription>
-                {event.tags.map((tag) => (
-                  <Badge key={tag.name} className="mr-1">{tag.name}</Badge>
-                ))}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              Spots Available: {event.spotsAvailable}
-            </CardContent>
-          </Card>
-        ))}
-      </ScrollArea>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-border">
+          <thead className="bg-secondary">
+            <tr>
+              <th className="px-4 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider">
+                Event
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider">
+                Capacity
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider">
+                Tags
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-background divide-y divide-border">
+            {filteredEvents.map((event) => (
+              <tr key={event.description} onClick={() => handleEventClick(event)} className="cursor-pointer hover:bg-accent/5">
+                <td className="px-4 py-2 whitespace-nowrap">{event.description}</td>
+                <td className="px-4 py-2 whitespace-nowrap">{formatDate(event.date)}</td>
+                <td className="px-4 py-2 whitespace-nowrap">{event.spotsAvailable}</td>
+                <td className="px-4 py-2 whitespace-nowrap">
+                  {event.tags.map((tag) => tag.name).join(", ")}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <Dialog open={!!selectedEvent} onOpenChange={(open) => { if (!open) setSelectedEvent(null); }}>
         <DialogTrigger asChild>
