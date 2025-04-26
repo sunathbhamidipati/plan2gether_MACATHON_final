@@ -1,0 +1,62 @@
+[
+  {
+    "description": "Crochet by the river",
+    "tags": [{ "name": "crochet" }, { "name": "river" }],
+    "spotsAvailable": 50,
+    "date": "2025-05-02"
+  },
+  {
+    "description": "Friends and fun: crochet day",
+    "tags": [{ "name": "friends" }, { "name": "crochet" }],
+    "spotsAvailable": 25,
+    "date": "2025-05-16"
+  },
+  {
+    "description": "Make your own yarn plush",
+    "tags": [{ "name": "crochet" }, { "name": "create" }, { "name": "socialise" }],
+    "spotsAvailable": 15,
+    "date": "2025-06-30"
+  },
+  {
+    "description": "Sip and paint",
+    "tags": [{ "name": "paint" }, { "name": "art" }, { "name": "beverages" }],
+    "spotsAvailable": 40,
+    "date": "2025-05-21"
+  },
+  {
+    "description": "Lazy beach afternoon",
+    "tags": [{ "name": "beach" }, { "name": "relax" }],
+    "spotsAvailable": 23,
+    "date": "2025-06-02"
+  },
+  {
+    "description": "A fun run in the park.",
+    "tags": [{ "name": "running" }, { "name": "outdoors" }],
+    "spotsAvailable": 10,
+    "date": "2024-09-10"
+  },
+  {
+    "description": "A workshop on pottery.",
+    "tags": [{ "name": "arts" }, { "name": "crafts" }],
+    "spotsAvailable": 5,
+    "date": "2024-10-15"
+  },
+  {
+    "description": "A relaxing yoga session.",
+    "tags": [{ "name": "yoga" }, { "name": "wellness" }],
+    "spotsAvailable": 12,
+    "date": "2024-11-20"
+  },
+  {
+    "description": "A thrilling rock climbing adventure.",
+    "tags": [{ "name": "climbing" }, { "name": "adventure" }],
+    "spotsAvailable": 8,
+    "date": "2024-12-25"
+  },
+  {
+    "description": "A creative writing workshop.",
+    "tags": [{ "name": "writing" }, { "name": "arts" }],
+    "spotsAvailable": 6,
+    "date": "2025-01-30"
+  }
+]
