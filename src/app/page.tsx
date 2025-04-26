@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { getEvents, Event } from "@/services/event";
 import { Badge } from "@/components/ui/badge";
 import CreateEventTab from "@/components/create-event-tab";
 import EventsTab from "@/components/events-tab";
@@ -17,16 +15,10 @@ export default function Home() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [activeTab, setActiveTab] = useState("home");
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const fetchedEvents = await getEvents(searchQuery);
-      setEvents(fetchedEvents);
-    };
-
-    if (activeTab === "home") {
-      fetchEvents();
-    }
-  }, [searchQuery, activeTab]);
+  const fetchEvents = async () => {
+    const fetchedEvents = await getEvents(searchQuery);
+    setEvents(fetchedEvents);
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -80,14 +72,21 @@ export default function Home() {
             value={searchQuery}
             onChange={handleSearch}
             className="mb-4"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                fetchEvents();
+              }
+            }}
           />
 
-          {events.length > 0 ? (
+          {searchQuery && events.length > 0 ? (
             <div>
               {events.map(renderEventCard)}
             </div>
           ) : (
-            <p>No events found. Be the first to create one!</p>
+            searchQuery ? (
+              <p>No events found. Be the first to create one!</p>
+            ) : null
           )}
 
           <Button>
