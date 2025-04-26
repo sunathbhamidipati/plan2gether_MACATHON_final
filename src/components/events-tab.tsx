@@ -8,18 +8,19 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
+import { RefreshCw } from "lucide-react";
 
 const EventsTab = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [filterTag, setFilterTag] = useState("");
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const allEvents = await getEvents("");
-      setEvents(allEvents);
-    };
+  const fetchEvents = async () => {
+    const allEvents = await getEvents("");
+    setEvents(allEvents);
+  };
 
+  useEffect(() => {
     fetchEvents();
   }, []);
 
@@ -36,7 +37,7 @@ const EventsTab = () => {
     setSelectedEvent(null);
   };
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: any): string => {
     try {
       const date = new Date(dateString);
       const day = String(date.getDate()).padStart(2, '0');
@@ -55,6 +56,7 @@ const EventsTab = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">All Events</h2>
         <Button variant="outline">Filters</Button>
+        <Button onClick={fetchEvents}><RefreshCw className="mr-2 h-4 w-4" />Refresh</Button>
       </div>
 
       <ScrollArea className="h-[400px] w-full rounded-md border">
@@ -103,6 +105,7 @@ const EventsTab = () => {
                 <Badge key={tag.name} className="mr-1">{tag.name}</Badge>
               ))}</div>
               <br />
+              {selectedEvent?.description}
               Spots Available: {selectedEvent?.spotsAvailable}
             </DialogDescription>
           </DialogHeader>
