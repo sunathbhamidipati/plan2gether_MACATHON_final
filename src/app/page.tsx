@@ -244,32 +244,36 @@ export default function Home() {
       {activeTab === "my-events" && (
         <section>
           <h2 className="text-2xl font-bold mb-4">My Events</h2>
-            <div className="w-full">
-              <Calendar
-                mode="month"
-                captionLayout="dropdown"
-                className="rounded-md border"
-                onSelect={handleDateSelect}
-                // Set the events to highlight
-                // @ts-expect-error
-                selected={joinedEvents.map(event => new Date(event.date))}
-              />
-            </div>
+            <div className="flex">
+              <div className="w-1/2">
+                <Calendar
+                  mode="month"
+                  captionLayout="dropdown"
+                  className="rounded-md border"
+                  onSelect={handleDateSelect}
+                  // Set the events to highlight
+                  // @ts-expect-error
+                  selected={joinedEvents.map(event => new Date(event.date))}
+                />
+              </div>
 
-          {selectedDate && (
-            <div className="mt-4">
-              <h3>Events on {format(selectedDate, 'MMMM d, yyyy')}</h3>
-              {eventsOnSelectedDate.length > 0 ? (
-                <ul>
-                  {eventsOnSelectedDate.map((event) => (
-                    <li key={event.description}>{event.description}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No events on this day.</p>
-              )}
+              <div className="w-1/2 ml-4">
+                {selectedDate && (
+                  <div className="mt-4">
+                    <h3>Events on {format(selectedDate, 'MMMM d, yyyy')}</h3>
+                    {eventsOnSelectedDate.length > 0 ? (
+                      <ul>
+                        {eventsOnSelectedDate.map((event) => (
+                          <li key={event.description}>{event.description}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>No events on this day.</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
         </section>
       )}
     </div>
