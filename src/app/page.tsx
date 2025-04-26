@@ -9,6 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import CreateEventTab from "@/components/create-event-tab";
 import EventsTab from "@/components/events-tab";
 import { getEvents, Event } from "@/services/event";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -57,16 +64,34 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-around mb-4">
-        <Button variant={activeTab === "home" ? "default" : "secondary"} onClick={() => setActiveTab("home")}>
-          Home
-        </Button>
-        <Button variant={activeTab === "create" ? "default" : "secondary"} onClick={() => setActiveTab("create")}>
-          Create
-        </Button>
-        <Button variant={activeTab === "events" ? "default" : "secondary"} onClick={() => setActiveTab("events")}>
-          Events
-        </Button>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-around">
+          <Button variant={activeTab === "home" ? "default" : "secondary"} onClick={() => setActiveTab("home")}>
+            Home
+          </Button>
+          <Button variant={activeTab === "create" ? "default" : "secondary"} onClick={() => setActiveTab("create")}>
+            Create
+          </Button>
+          <Button variant={activeTab === "events" ? "default" : "secondary"} onClick={() => setActiveTab("events")}>
+            Events
+          </Button>
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src="https://picsum.photos/200/200" alt="@shadcn" />
+                <AvatarFallback>SC</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuItem>Account</DropdownMenuItem>
+            <DropdownMenuItem>Chats</DropdownMenuItem>
+            <DropdownMenuItem>My Events</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {activeTab === "home" && (
@@ -107,9 +132,10 @@ export default function Home() {
               <DialogHeader>
                 <DialogTitle>{selectedEvent?.description}</DialogTitle>
                 <DialogDescription>
-                  {selectedEvent?.tags.map((tag) => (
+                  <div>{selectedEvent?.description}</div>
+                  <div>{selectedEvent?.tags.map((tag) => (
                     <Badge key={tag.name} className="mr-1">{tag.name}</Badge>
-                  ))}
+                  ))}</div>
                   <br />
                   Spots Available: {selectedEvent?.spotsAvailable}
                 </DialogDescription>
