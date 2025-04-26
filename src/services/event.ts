@@ -1,0 +1,50 @@
+/**
+ * Represents a tag.
+ */
+export interface Tag {
+  /**
+   * The name of the tag.
+   */
+  name: string;
+}
+
+/**
+ * Represents event information, including description, tags and number of spots available.
+ */
+export interface Event {
+  /**
+   * The event description.
+   */
+  description: string;
+  /**
+   * The event tags.
+   */
+  tags: Tag[];
+   /**
+   * The number of spots available for the event.
+   */
+  spotsAvailable: number;
+}
+
+/**
+ * Asynchronously retrieves events based on a query.
+ *
+ * @param query The query to search for events.
+ * @returns A promise that resolves to a list of Event objects.
+ */
+export async function getEvents(query: string): Promise<Event[]> {
+  // TODO: Implement this by calling an API.
+
+  return [
+    {
+      description: 'A fun run in the park.',
+      tags: [{ name: 'running' }, { name: 'outdoors' }],
+      spotsAvailable: 10,
+    },
+    {
+      description: 'A workshop on pottery.',
+      tags: [{ name: 'arts' }, { name: 'crafts' }],
+      spotsAvailable: 5,
+    },
+  ];
+}
