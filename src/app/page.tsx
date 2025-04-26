@@ -261,7 +261,7 @@ export default function Home() {
           <div className="w-1/4 border-r">
             <h2 className="text-xl font-bold mb-4 p-4">My Chats</h2>
             <ScrollArea className="h-[400px]">
-              {joinedEvents.map((event) => (
+              {allEvents.map((event) => (
                 <div
                   key={event.description}
                   className="p-4 cursor-pointer hover:bg-secondary"
@@ -347,4 +347,5 @@ export default function Home() {
     </div>
   );
 }
+
 
