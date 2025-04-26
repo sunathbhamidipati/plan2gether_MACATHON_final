@@ -29,6 +29,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const [joinedEvents, setJoinedEvents] = useState<Event[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [eventsOnSelectedDate, setEventsOnSelectedDate] = useState<Event[]>([]);
 
   const { toast } = useToast();
 
@@ -101,6 +103,23 @@ export default function Home() {
     const navigateToTab = (tab: string) => {
         setActiveTab(tab);
     };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
+    if (date) {
+      const eventsOnDate = joinedEvents.filter(event => {
+        const eventDate = new Date(event.date);
+        return (
+          eventDate.getFullYear() === date.getFullYear() &&
+          eventDate.getMonth() === date.getMonth() &&
+          eventDate.getDate() === date.getDate()
+        );
+      });
+      setEventsOnSelectedDate(eventsOnDate);
+    } else {
+      setEventsOnSelectedDate([]);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -230,16 +249,29 @@ export default function Home() {
                 mode="month"
                 captionLayout="dropdown"
                 className="rounded-md border"
-                onSelect={console.log}
+                onSelect={handleDateSelect}
                 // Set the events to highlight
                 // @ts-expect-error
                 selected={joinedEvents.map(event => new Date(event.date))}
               />
             </div>
+
+          {selectedDate && (
+            <div className="mt-4">
+              <h3>Events on {format(selectedDate, 'MMMM d, yyyy')}</h3>
+              {eventsOnSelectedDate.length > 0 ? (
+                <ul>
+                  {eventsOnSelectedDate.map((event) => (
+                    <li key={event.description}>{event.description}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No events on this day.</p>
+              )}
+            </div>
+          )}
         </section>
       )}
     </div>
   );
 }
-
-
