@@ -143,6 +143,14 @@ export default function Home() {
     }
   };
 
+    useEffect(() => {
+        // Update joinedEvents whenever allEvents changes
+        const newJoinedEvents = allEvents.filter(event =>
+            Object.keys(chatMessages).includes(event.description)
+        );
+        setJoinedEvents(newJoinedEvents);
+    }, [allEvents, chatMessages]);
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
@@ -216,6 +224,7 @@ export default function Home() {
                     <Badge key={tag.name} className="mr-1">{tag.name}</Badge>
                   ))}</div>
                   <br />
+                  {selectedEvent?.description}
                   Spots Available: {selectedEvent?.spotsAvailable}
                 </DialogDescription>
               </DialogHeader>
@@ -321,7 +330,7 @@ export default function Home() {
                   onSelect={handleDateSelect}
                   // Set the events to highlight
                   // @ts-expect-error
-                  selected={joinedEvents.map(event => new Date(event.date))}
+                  selected={allEvents.map(event => new Date(event.date))}
                 />
               </div>
 
