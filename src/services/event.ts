@@ -46,5 +46,45 @@ export async function getEvents(query: string): Promise<Event[]> {
       tags: [{ name: 'arts' }, { name: 'crafts' }],
       spotsAvailable: 5,
     },
+    {
+      description: 'A relaxing yoga session.',
+      tags: [{ name: 'yoga' }, { name: 'wellness' }],
+      spotsAvailable: 12,
+    },
+    {
+      description: 'A thrilling rock climbing adventure.',
+      tags: [{ name: 'climbing' }, { name: 'adventure' }],
+      spotsAvailable: 8,
+    },
+    {
+      description: 'A creative writing workshop.',
+      tags: [{ name: 'writing' }, { name: 'arts' }],
+      spotsAvailable: 6,
+    },
+    {
+      description: 'A social networking event.',
+      tags: [{ name: 'networking' }, { name: 'social' }],
+      spotsAvailable: 20,
+    },
+    {
+      description: 'A delicious cooking class.',
+      tags: [{ name: 'cooking' }, { name: 'food' }],
+      spotsAvailable: 7,
+    },
+    {
+      description: 'A challenging hiking trip.',
+      tags: [{ name: 'hiking' }, { name: 'outdoors' }],
+      spotsAvailable: 15,
+    },
+    {
+      description: 'A mindful meditation session.',
+      tags: [{ name: 'meditation' }, { name: 'wellness' }],
+      spotsAvailable: 10,
+    },
+    {
+      description: 'A fun and friendly board game night.',
+      tags: [{ name: 'board games' }, { name: 'social' }],
+      spotsAvailable: 12,
+    },
   ];
 }
