@@ -36,7 +36,8 @@ const EventsTab = () => {
     setSelectedEvent(null);
   };
 
-  const formatDate = (date: Date): string => {
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
     const year = date.getFullYear();
@@ -51,7 +52,7 @@ const EventsTab = () => {
         <Button variant="outline">Filters</Button>
       </div>
 
-      <div className="overflow-x-auto">
+      <ScrollArea className="h-[400px] w-full rounded-md border">
         <table className="min-w-full divide-y divide-border">
           <thead className="bg-secondary">
             <tr>
@@ -82,7 +83,7 @@ const EventsTab = () => {
             ))}
           </tbody>
         </table>
-      </div>
+      </ScrollArea>
 
       <Dialog open={!!selectedEvent} onOpenChange={(open) => { if (!open) setSelectedEvent(null); }}>
         <DialogTrigger asChild>
