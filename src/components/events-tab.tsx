@@ -47,9 +47,9 @@ const EventsTab = () => {
         className="mb-4"
       />
 
-      <div className="grid gap-4">
+      <div>
         {filteredEvents.map((event) => (
-          <Card key={event.description} className="cursor-pointer" onClick={() => handleEventClick(event)}>
+          <Card key={event.description} className="mb-4 cursor-pointer" onClick={() => handleEventClick(event)}>
             <CardHeader>
               <CardTitle>{event.description}</CardTitle>
               <CardDescription>
