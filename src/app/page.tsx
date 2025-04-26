@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -97,7 +97,6 @@ export default function Home() {
             <Button variant="ghost" className="h-8 w-8 p-0">
               <Avatar className="h-8 w-8">
                 <User className="h-4 w-4" />
-                <AvatarFallback>P</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
