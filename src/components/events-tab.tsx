@@ -98,6 +98,7 @@ const EventsTab = () => {
           <DialogHeader>
             <DialogTitle>{selectedEvent?.description}</DialogTitle>
             <DialogDescription>
+              <div>{selectedEvent?.description}</div>
               <div>{selectedEvent?.tags.map((tag) => (
                 <Badge key={tag.name} className="mr-1">{tag.name}</Badge>
               ))}</div>
