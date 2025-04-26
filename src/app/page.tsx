@@ -20,9 +20,10 @@ import { User, Search, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format, isSameDay, startOfMonth, endOfMonth } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CreateEventDialog } from "@/components/create-event-dialog";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,6 +37,7 @@ export default function Home() {
   const [selectedChat, setSelectedChat] = useState<Event | null>(null);
   const [chatMessages, setChatMessages] = useState<{ [eventId: string]: { sender: string; message: string }[] }>({});
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+    const [isCreateEventDialogOpen, setIsCreateEventDialogOpen] = useState(false);
 
   const { toast } = useToast();
 
@@ -183,10 +185,10 @@ export default function Home() {
     }, [allEvents, chatMessages]);
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4 bg-accent text-accent-foreground p-4 rounded-md">
+    <div className="container mx-auto p-4 bg-fff7e7">
+      <div style={{ backgroundColor: '#fcc0c5' }} className="flex justify-between items-center mb-4 p-4 rounded-md">
           <div className="text-2xl font-bold">plan2gether</div>
-        <div className="flex justify-around">
+        <div className="flex space-x-4 items-center">
           <Button variant={activeTab === "home" ? "default" : "secondary"} onClick={() => navigateToTab("home")}>
             Home
           </Button>
@@ -200,13 +202,13 @@ export default function Home() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>
-                  <User className="h-5 w-5" />
-                </AvatarFallback>
-              </Avatar>
-            </Button>
+              <Button variant="ghost" className="h-8 w-8 p-0 rounded-full flex items-center justify-center">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>
+                      <User className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuItem onClick={() => navigateToTab("account")}>
@@ -231,21 +233,18 @@ export default function Home() {
                 placeholder="Search for events"
                 value={searchQuery}
                 onChange={handleSearch}
-                className="mb-4 rounded-full pl-12"
+                className="mb-4 rounded-full"
+                style={{ paddingRight: '2.5rem' }}
             />
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={clearSearchQuery}
+                    className="absolute inset-y-0 right-0 flex items-center px-2"
+                    style={{ backgroundColor: 'transparent' }}
+                >
                     <Search className="h-5 w-5 text-muted-foreground" />
-                </div>
-                {searchQuery && (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={clearSearchQuery}
-                        className="absolute inset-y-0 right-2 flex items-center"
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
-                )}
+                </Button>
             </div>
 
           {events.length > 0 ? (
@@ -282,7 +281,7 @@ export default function Home() {
       )}
 
       {activeTab === "create" && (
-        <CreateEventTab addEvent={addEvent} />
+          <CreateEventTab addEvent={addEvent} />
       )}
 
       {activeTab === "events" && (
@@ -426,7 +425,11 @@ export default function Home() {
               )}
           </section>
       )}
+        <CreateEventDialog
+            open={isCreateEventDialogOpen}
+            onOpenChange={setIsCreateEventDialogOpen}
+            addEvent={addEvent}
+        />
     </div>
   );
 }
-
