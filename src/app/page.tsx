@@ -33,6 +33,7 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [eventsOnSelectedDate, setEventsOnSelectedDate] = useState<Event[]>([]);
   const [selectedChat, setSelectedChat] = useState<Event | null>(null);
+  const [chatMessages, setChatMessages] = useState<{ [eventId: string]: { sender: string; message: string }[] }>({});
 
   const { toast } = useToast();
 
@@ -74,6 +75,13 @@ export default function Home() {
   const handleJoinEvent = () => {
     if (selectedEvent) {
       setJoinedEvents(prevJoinedEvents => [...prevJoinedEvents, selectedEvent]);
+      // Initialize chat messages for the joined event
+      setChatMessages(prevChatMessages => ({
+        ...prevChatMessages,
+        [selectedEvent.description]: [
+          { sender: "Eventide", message: "Welcome to the chat!" },
+        ],
+      }));
       toast({
         title: "Joined Event",
         description: `You have joined the event: ${selectedEvent?.description}`,
@@ -120,6 +128,18 @@ export default function Home() {
       setEventsOnSelectedDate(eventsOnDate);
     } else {
       setEventsOnSelectedDate([]);
+    }
+  };
+
+  const handleSendMessage = (eventDescription: string, message: string) => {
+    if (message.trim() !== "") {
+      setChatMessages(prevChatMessages => ({
+        ...prevChatMessages,
+        [eventDescription]: [
+          ...(prevChatMessages[eventDescription] || []),
+          { sender: "You", message: message },
+        ],
+      }));
     }
   };
 
@@ -259,26 +279,28 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-2">{selectedChat.description}</h3>
                 <div className="space-y-2">
                   {/* Example messages - replace with actual chat data */}
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm text-muted-foreground">Jay</span>
-                    <div className="bg-accent text-accent-foreground rounded-lg p-2">
-                      We will be meeting at the Flagstaff gardens.
+                  {chatMessages[selectedChat.description]?.map((message, index) => (
+                    <div key={index} className={`flex flex-col ${message.sender === "You" ? 'items-end' : 'items-start'}`}>
+                      <span className="text-sm text-muted-foreground">{message.sender}</span>
+                      <div className="bg-accent text-accent-foreground rounded-lg p-2">
+                        {message.message}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm text-muted-foreground">Stacie</span>
-                    <div className="bg-accent text-accent-foreground rounded-lg p-2">
-                      Great! so excited to meet all of youuu
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-sm text-muted-foreground">You</span>
-                    <div className="bg-accent text-accent-foreground rounded-lg p-2">
-                      Do we bring any supplies of our own?
-                    </div>
-                  </div>
+                  ))}
                 </div>
-                <Input type="text" placeholder="Type your message..." className="mt-4" />
+                <Input
+                  type="text"
+                  placeholder="Type your message..."
+                  className="mt-4"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      // @ts-ignore
+                      handleSendMessage(selectedChat.description, e.target.value);
+                      // @ts-ignore
+                      e.target.value = ''; // Clear the input after sending
+                    }
+                  }}
+                />
               </div>
             ) : (
               <p>Select a chat to view messages.</p>
