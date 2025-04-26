@@ -20,8 +20,9 @@ import { User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, isSameDay, startOfMonth, endOfMonth } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,6 +35,7 @@ export default function Home() {
   const [eventsOnSelectedDate, setEventsOnSelectedDate] = useState<Event[]>([]);
   const [selectedChat, setSelectedChat] = useState<Event | null>(null);
   const [chatMessages, setChatMessages] = useState<{ [eventId: string]: { sender: string; message: string }[] }>({});
+    const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
   const { toast } = useToast();
 
@@ -150,6 +152,14 @@ export default function Home() {
         );
         setJoinedEvents(newJoinedEvents);
     }, [allEvents, chatMessages]);
+
+    const prevMonth = () => {
+        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+    };
+
+    const nextMonth = () => {
+        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+    };
 
   return (
     <div className="container mx-auto p-4">
@@ -319,42 +329,65 @@ export default function Home() {
       )}
 
       {activeTab === "my-events" && (
-        <section>
-          <h2 className="text-2xl font-bold mb-4">My Events</h2>
-            <div className="flex">
-              <div className="w-1/2">
-                <Calendar
-                  mode="month"
-                  captionLayout="dropdown"
-                  className="rounded-md border"
-                  onSelect={handleDateSelect}
-                  // Set the events to highlight
-                  // @ts-expect-error
-                  selected={allEvents.map(event => new Date(event.date))}
-                />
+          <section className="p-4">
+              <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                      <Button variant="ghost" size="icon" onClick={prevMonth}>
+                          <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <h2 className="text-lg font-semibold">{format(currentMonth, 'MMMM yyyy')}</h2>
+                      <Button variant="ghost" size="icon" onClick={nextMonth}>
+                          <ChevronRight className="h-4 w-4" />
+                      </Button>
+                  </div>
+                  <div className="grid grid-cols-7 gap-1">
+                      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                          <div key={day} className="text-center text-sm text-muted-foreground">{day}</div>
+                      ))}
+                      {Array.from({ length: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay() }).map((_, index) => (
+                          <div key={`empty-${index}`}></div>
+                      ))}
+                      {Array.from({ length: new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate() }).map((_, index) => {
+                          const day = index + 1;
+                          const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+                          const isToday = isSameDay(date, new Date());
+                          const eventsOnDay = joinedEvents.filter(event => isSameDay(new Date(event.date), date));
+
+                          return (
+                              <div
+                                  key={day}
+                                  className={cn(
+                                      "flex h-10 w-10 items-center justify-center rounded-md border text-center text-sm",
+                                      isToday ? "bg-accent text-accent-foreground" : "bg-background",
+                                      eventsOnDay.length > 0 ? "font-semibold" : "",
+                                      selectedDate && isSameDay(date, selectedDate) ? "bg-primary text-primary-foreground" : "",
+                                      "hover:bg-secondary cursor-pointer"
+                                  )}
+                                  onClick={() => handleDateSelect(date)}
+                              >
+                                  {day}
+                              </div>
+                          );
+                      })}
+                  </div>
               </div>
 
-              <div className="w-1/2 ml-4">
-                {selectedDate && (
+              {selectedDate && (
                   <div className="mt-4">
-                    <h3>Events on {format(selectedDate, 'MMMM d, yyyy')}</h3>
-                    {eventsOnSelectedDate.length > 0 ? (
-                      <ul>
-                        {eventsOnSelectedDate.map((event) => (
-                          <li key={event.description}>{event.description}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>No events on this day.</p>
-                    )}
+                      <h3 className="text-xl font-semibold mb-2">Events on {format(selectedDate, 'MMMM d, yyyy')}</h3>
+                      {eventsOnSelectedDate.length > 0 ? (
+                          <ul>
+                              {eventsOnSelectedDate.map((event) => (
+                                  <li key={event.description} className="mb-2 p-2 rounded-md bg-secondary">{event.description}</li>
+                              ))}
+                          </ul>
+                      ) : (
+                          <p>No events on this day.</p>
+                      )}
                   </div>
-                )}
-              </div>
-            </div>
-        </section>
+              )}
+          </section>
       )}
     </div>
   );
 }
-
-
