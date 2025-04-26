@@ -37,12 +37,17 @@ const EventsTab = () => {
   };
 
   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-    const year = date.getFullYear();
+    try {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+      const year = date.getFullYear();
 
-    return `${day}/${month}/${year}`;
+      return `${day}/${month}/${year}`;
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "Invalid Date";
+    }
   };
 
   return (
@@ -93,9 +98,9 @@ const EventsTab = () => {
           <DialogHeader>
             <DialogTitle>{selectedEvent?.description}</DialogTitle>
             <DialogDescription>
-              {selectedEvent?.tags.map((tag) => (
+              <div>{selectedEvent?.tags.map((tag) => (
                 <Badge key={tag.name} className="mr-1">{tag.name}</Badge>
-              ))}
+              ))}</div>
               <br />
               Spots Available: {selectedEvent?.spotsAvailable}
             </DialogDescription>
