@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Badge } from "@/components/ui/badge";
 import CreateEventTab from "@/components/create-event-tab";
 import EventsTab from "@/components/events-tab";
+import { getEvents, Event } from "@/services/event";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,8 +17,13 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
 
   const fetchEvents = async () => {
-    const fetchedEvents = await getEvents(searchQuery);
-    setEvents(fetchedEvents);
+    const fetchedEvents = await getEvents("");
+    const filteredEvents = fetchedEvents.filter(event =>
+      event.tags.some(tag =>
+        tag.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+    setEvents(filteredEvents);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
