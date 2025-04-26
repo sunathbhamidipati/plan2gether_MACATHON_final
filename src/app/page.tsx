@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,8 +24,19 @@ export default function Home() {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [activeTab, setActiveTab] = useState("home");
+  const [allEvents, setAllEvents] = useState<Event[]>([]);
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchAllEvents = async () => {
+      const fetchedEvents = await getEvents("");
+      setAllEvents(fetchedEvents);
+    };
+
+    fetchAllEvents();
+  }, []);
+
 
   useEffect(() => {
     if (searchQuery) {
@@ -33,11 +44,10 @@ export default function Home() {
     } else {
       setEvents([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, allEvents]);
 
   const fetchEvents = async () => {
-    const fetchedEvents = await getEvents("");
-    const filteredEvents = fetchedEvents.filter(event =>
+    const filteredEvents = allEvents.filter(event =>
       event.tags.some(tag =>
         tag.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
@@ -59,6 +69,10 @@ export default function Home() {
       description: `You have joined the event: ${selectedEvent?.description}`,
     });
     setSelectedEvent(null);
+  };
+
+  const addEvent = (newEvent: Event) => {
+      setAllEvents(prevEvents => [...prevEvents, newEvent]);
   };
 
   const renderEventCard = (event: Event) => (
@@ -94,7 +108,7 @@ export default function Home() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" className="h-8 w-8 p-0 rounded-full">
               <Avatar className="h-8 w-8">
                 <User className="h-4 w-4" />
               </Avatar>
@@ -152,11 +166,11 @@ export default function Home() {
       )}
 
       {activeTab === "create" && (
-        <CreateEventTab />
+        <CreateEventTab addEvent={addEvent} />
       )}
 
       {activeTab === "events" && (
-        <EventsTab />
+        <EventsTab events={allEvents} />
       )}
     </div>
   );
