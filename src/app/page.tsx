@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,13 +15,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { User } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [activeTab, setActiveTab] = useState("home");
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (searchQuery) {
+      fetchEvents();
+    } else {
+      setEvents([]);
+    }
+  }, [searchQuery]);
 
   const fetchEvents = async () => {
     const fetchedEvents = await getEvents("");
@@ -42,7 +54,10 @@ export default function Home() {
   };
 
   const handleJoinEvent = () => {
-    alert("Joining event: " + selectedEvent?.description);
+    toast({
+      title: "Joined Event",
+      description: `You have joined the event: ${selectedEvent?.description}`,
+    });
     setSelectedEvent(null);
   };
 
@@ -81,8 +96,8 @@ export default function Home() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="https://picsum.photos/200/200" alt="@shadcn" />
-                <AvatarFallback>SC</AvatarFallback>
+                <User className="h-4 w-4" />
+                <AvatarFallback>P</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -103,14 +118,9 @@ export default function Home() {
             value={searchQuery}
             onChange={handleSearch}
             className="mb-4"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                fetchEvents();
-              }
-            }}
           />
 
-          {searchQuery && events.length > 0 ? (
+          {events.length > 0 ? (
             <div>
               {events.map(renderEventCard)}
             </div>
@@ -119,10 +129,6 @@ export default function Home() {
               <p>No events found. Be the first to create one!</p>
             ) : null
           )}
-
-          <Button>
-            <a href="#create" className="text-white no-underline">Create Your Own Event</a>
-          </Button>
 
           <Dialog open={!!selectedEvent} onOpenChange={(open) => { if (!open) setSelectedEvent(null); }}>
             <DialogTrigger asChild>
