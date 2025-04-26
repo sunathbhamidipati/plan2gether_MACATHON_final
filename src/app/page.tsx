@@ -161,6 +161,22 @@ export default function Home() {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
     };
 
+    useEffect(() => {
+        // Update joinedEvents whenever allEvents changes
+        const newJoinedEvents = allEvents.filter(event =>
+            Object.keys(chatMessages).includes(event.description)
+        );
+        setJoinedEvents(newJoinedEvents);
+    }, [allEvents, chatMessages]);
+
+    useEffect(() => {
+        // Filter joined events from allEvents
+        const newJoinedEvents = allEvents.filter(event =>
+            Object.keys(chatMessages).includes(event.description)
+        );
+        setJoinedEvents(newJoinedEvents);
+    }, [allEvents, chatMessages]);
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
@@ -351,7 +367,8 @@ export default function Home() {
                           const day = index + 1;
                           const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
                           const isToday = isSameDay(date, new Date());
-                          const eventsOnDay = joinedEvents.filter(event => isSameDay(new Date(event.date), date));
+                          const eventsOnDay = allEvents.filter(event =>
+                            Object.keys(chatMessages).includes(event.description) && isSameDay(new Date(event.date), date));
 
                           return (
                               <div
@@ -391,3 +408,4 @@ export default function Home() {
     </div>
   );
 }
+
