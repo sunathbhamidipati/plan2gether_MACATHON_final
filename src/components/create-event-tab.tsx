@@ -58,7 +58,7 @@ const CreateEventTab: React.FC<CreateEventTabProps> = ({ addEvent }) => {
       />
 
       <div className="flex space-x-4">
-          <Button onClick={handleGenerateIdeas} className="bg-accent text-white">
+          <Button onClick={handleGenerateIdeas} className="">
               Generate Event Ideas
           </Button>
 
